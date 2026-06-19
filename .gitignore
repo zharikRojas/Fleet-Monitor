@@ -1,0 +1,28 @@
+# .NET
+bin/
+obj/
+*.user
+*.db
+*.db-shm
+*.db-wal
+
+# IDE
+.vs/
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS (macOS)
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# Node (frontend — future)
+node_modules/
+dist/
+.env
+.env.local
+
+# Logs
+*.log
