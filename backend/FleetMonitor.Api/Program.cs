@@ -5,6 +5,7 @@ using FleetMonitor.Api.Infrastructure.Data.Extensions;
 using FleetMonitor.Api.Middleware;
 using FleetMonitor.Api.Services;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
 
 var envPath = Path.Combine(Directory.GetCurrentDirectory(), ".env");
 var parentEnvPath = Path.Combine(Directory.GetCurrentDirectory(), "..", "..", ".env");
@@ -23,7 +24,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Configuration.AddEnvironmentVariables();
 
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection")
-    ?? throw new InvalidOperationException("Cadena de conexión 'DefaultConnection' no configurada.");
+    ?? throw new InvalidOperationException("Connection string 'DefaultConnection' is not configured.");
 
 var secureConnectionString = ReplacePlaceholders(connectionString);
 builder.Configuration["ConnectionStrings:DefaultConnection"] = secureConnectionString;
@@ -39,7 +40,32 @@ builder.Configuration["Jwt:ExpirationMinutes"] = ReplacePlaceholders(
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+    {
+        Name = "Authorization",
+        Type = SecuritySchemeType.Http,
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+    });
+
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type = ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            Array.Empty<string>()
+        }
+    });
+});
 
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddScoped<AuthService>();
