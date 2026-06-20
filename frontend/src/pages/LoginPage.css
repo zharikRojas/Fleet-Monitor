@@ -1,0 +1,132 @@
+.login-page {
+  min-height: 100dvh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: clamp(12px, 3vw, 32px);
+  background:
+    radial-gradient(circle at 15% 20%, rgba(22, 119, 255, 0.18), transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(114, 46, 209, 0.14), transparent 30%),
+    linear-gradient(160deg, #0f172a 0%, #1e293b 45%, #0f172a 100%);
+}
+
+.login-page--success {
+  padding: clamp(16px, 4vw, 40px);
+}
+
+.login-shell {
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+}
+
+.login-shell--narrow {
+  max-width: 560px;
+}
+
+.login-card {
+  width: 100%;
+  background: #ffffff !important;
+  border-radius: clamp(12px, 2vw, 18px) !important;
+  box-shadow: 0 24px 48px rgba(0, 0, 0, 0.35) !important;
+  border: 1px solid rgba(255, 255, 255, 0.08) !important;
+}
+
+.login-card .login-title {
+  margin: 0 0 8px !important;
+  color: #0f172a !important;
+}
+
+.login-card .login-subtitle {
+  margin: 0 !important;
+  color: #64748b !important;
+  font-size: clamp(13px, 2.5vw, 15px) !important;
+  line-height: 1.6 !important;
+}
+
+.login-card .ant-form-item-label > label {
+  color: #334155 !important;
+}
+
+.login-card .login-hint,
+.login-card .login-hint .ant-typography {
+  color: #64748b !important;
+}
+
+.login-card .ant-card-body {
+  padding: clamp(20px, 4vw, 40px) !important;
+}
+
+.login-brand {
+  text-align: center;
+  padding: clamp(8px, 2vw, 16px) 0;
+}
+
+.login-logo {
+  width: clamp(48px, 10vw, 64px);
+  height: clamp(48px, 10vw, 64px);
+  margin: 0 auto clamp(12px, 2vw, 20px);
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  font-size: clamp(22px, 5vw, 30px);
+  color: #fff;
+  background: linear-gradient(135deg, #1677ff, #722ed1);
+  box-shadow: 0 8px 24px rgba(22, 119, 255, 0.35);
+}
+
+.login-alert {
+  margin-bottom: 16px;
+}
+
+.login-submit {
+  margin-bottom: 0 !important;
+}
+
+.login-hint {
+  margin-top: clamp(16px, 3vw, 24px);
+  padding: clamp(10px, 2vw, 14px);
+  border-radius: 10px;
+  background: rgba(148, 163, 184, 0.08);
+  border: 1px solid rgba(148, 163, 184, 0.12);
+  font-size: clamp(11px, 2.2vw, 13px);
+  color: #64748b;
+  line-height: 1.6;
+  word-break: break-word;
+}
+
+.login-page--success .ant-result-title {
+  color: #f1f5f9 !important;
+}
+
+.login-page--success .ant-result-subtitle {
+  color: #94a3b8 !important;
+}
+
+@media (min-width: 768px) {
+  .login-brand {
+    text-align: left;
+    padding-right: 8px;
+    border-right: 1px solid rgba(148, 163, 184, 0.16);
+  }
+
+  .login-logo {
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 767px) {
+  .login-card .ant-card-body {
+    padding: 20px 16px !important;
+  }
+
+  .login-brand {
+    padding-bottom: 4px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .login-shell {
+    max-width: 1040px;
+  }
+}
