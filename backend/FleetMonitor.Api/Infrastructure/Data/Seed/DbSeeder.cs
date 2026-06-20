@@ -3,6 +3,7 @@ using System.Text;
 using FleetMonitor.Api.Domain.Entities;
 using FleetMonitor.Api.Domain.Enums;
 using FleetMonitor.Api.Domain.Helpers;
+using FleetMonitor.Api.Services;
 using Microsoft.EntityFrameworkCore;
 
 namespace FleetMonitor.Api.Infrastructure.Data.Seed;
@@ -22,7 +23,7 @@ public static class DbSeeder
         {
             Id = Guid.NewGuid(),
             Email = "admin@fleetmonitor.com",
-            PasswordHash = HashPassword("Admin123!"),
+            PasswordHash = PasswordHasher.Hash("Admin123!"),
             Role = UserRole.Admin,
             CreatedAt = now
         };
@@ -31,7 +32,7 @@ public static class DbSeeder
         {
             Id = Guid.NewGuid(),
             Email = "viewer@fleetmonitor.com",
-            PasswordHash = HashPassword("Viewer123!"),
+            PasswordHash = PasswordHasher.Hash("Viewer123!"),
             Role = UserRole.Viewer,
             CreatedAt = now
         };
@@ -91,16 +92,5 @@ public static class DbSeeder
         await context.SaveChangesAsync(cancellationToken);
     }
 
-    internal static string HashPassword(string password)
-    {
-        var salt = Encoding.UTF8.GetBytes("fleet-monitor-seed");
-        var hash = Rfc2898DeriveBytes.Pbkdf2(
-            Encoding.UTF8.GetBytes(password),
-            salt,
-            iterations: 100_000,
-            hashAlgorithm: HashAlgorithmName.SHA256,
-            outputLength: 32);
-
-        return Convert.ToBase64String(hash);
-    }
+    
 }
