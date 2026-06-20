@@ -15,7 +15,8 @@ public class JwtAuthMiddleware(RequestDelegate next, JwtService jwtService)
             return;
         }
 
-        var token = ExtractBearerToken(context.Request.Headers.Authorization);
+        var token = ExtractBearerToken(context.Request.Headers.Authorization)
+            ?? ExtractAccessTokenFromQuery(context.Request);
         if (token is null)
         {
             await WriteUnauthorizedAsync(context, "Token invalido o expirado");
@@ -54,6 +55,17 @@ public class JwtAuthMiddleware(RequestDelegate next, JwtService jwtService)
         }
 
         return authorizationHeader["Bearer ".Length..].Trim();
+    }
+
+    private static string? ExtractAccessTokenFromQuery(HttpRequest request)
+    {
+        if (!request.Path.StartsWithSegments("/hubs"))
+        {
+            return null;
+        }
+
+        var accessToken = request.Query["access_token"].FirstOrDefault();
+        return string.IsNullOrWhiteSpace(accessToken) ? null : accessToken.Trim();
     }
 
     private static async Task WriteUnauthorizedAsync(HttpContext context, string message)

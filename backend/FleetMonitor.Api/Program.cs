@@ -2,6 +2,7 @@ using DotNetEnv;
 using FleetMonitor.Api.Infrastructure.Auth;
 using FleetMonitor.Api.Infrastructure.Data;
 using FleetMonitor.Api.Infrastructure.Data.Extensions;
+using FleetMonitor.Api.Hubs;
 using FleetMonitor.Api.Middleware;
 using FleetMonitor.Api.Services;
 using Microsoft.EntityFrameworkCore;
@@ -67,9 +68,22 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
+builder.Services.AddSignalR();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowFrontend", policy =>
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000")
+            .AllowAnyHeader()
+            .AllowAnyMethod()
+            .AllowCredentials());
+});
+
 builder.Services.AddSingleton<JwtService>();
 builder.Services.AddScoped<AuthService>();
 builder.Services.AddScoped<DeviceService>();
+builder.Services.AddScoped<FuelAlertService>();
+builder.Services.AddScoped<SensorIngestService>();
+builder.Services.AddScoped<AlertNotificationService>();
 
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseNpgsql(secureConnectionString));
@@ -85,9 +99,11 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowFrontend");
 app.UseMiddleware<JwtAuthMiddleware>();
 app.UseAuthorization();
 app.MapControllers();
+app.MapHub<AlertsHub>("/hubs/alerts");
 
 app.Run();
 

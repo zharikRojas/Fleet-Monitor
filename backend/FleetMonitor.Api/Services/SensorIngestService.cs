@@ -4,9 +4,11 @@ using FleetMonitor.Api.Infrastructure.Data;
 
 namespace FleetMonitor.Api.Services;
 
-public class SensorIngestService(AppDbContext context, FuelAlertService fuelAlertService)
+public class SensorIngestService(
+    AppDbContext context,
+    FuelAlertService fuelAlertService,
+    AlertNotificationService alertNotificationService)
 {
-
     public async Task<bool> IngestSensorReadingsAsync(IngestSensorRequest request)
     {
         var device = await context.Devices.FindAsync(request.DeviceId);
@@ -32,9 +34,18 @@ public class SensorIngestService(AppDbContext context, FuelAlertService fuelAler
             Speed = request.Speed,
             Timestamp = DateTime.UtcNow
         });
-        await fuelAlertService.CheckFuelAlertAsync(request.DeviceId, request.Fuel, device.FuelConsumptionRate);
+        var newAlert = await fuelAlertService.CheckFuelAlertAsync(
+            request.DeviceId,
+            request.Fuel,
+            device.FuelConsumptionRate);
 
         await context.SaveChangesAsync();
+
+        if (newAlert is not null)
+        {
+            await alertNotificationService.NotifyNewAlertAsync(newAlert, device);
+        }
+
         return true;
    
     }
