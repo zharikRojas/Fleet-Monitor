@@ -1,4 +1,5 @@
 using DotNetEnv;
+using System.Text.Json;
 using FleetMonitor.Api.Infrastructure.Auth;
 using FleetMonitor.Api.Infrastructure.Data;
 using FleetMonitor.Api.Infrastructure.Data.Extensions;
@@ -50,6 +51,7 @@ builder.Services.AddSwaggerGen(options =>
         Scheme = "Bearer",
         BearerFormat = "JWT",
         In = ParameterLocation.Header,
+        Description = "Pega solo el valor del token (sin la palabra 'Bearer')"
     });
 
     options.AddSecurityRequirement(new OpenApiSecurityRequirement
@@ -68,7 +70,11 @@ builder.Services.AddSwaggerGen(options =>
     });
 });
 
-builder.Services.AddSignalR();
+builder.Services.AddSignalR()
+    .AddJsonProtocol(options =>
+    {
+        options.PayloadSerializerOptions.PropertyNamingPolicy = JsonNamingPolicy.CamelCase;
+    });
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowFrontend", policy =>
@@ -97,8 +103,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+else
+{
+    app.UseHttpsRedirection();
+}
 
-app.UseHttpsRedirection();
 app.UseCors("AllowFrontend");
 app.UseMiddleware<JwtAuthMiddleware>();
 app.UseAuthorization();

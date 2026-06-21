@@ -7,6 +7,7 @@ import {
   type ReactNode,
 } from 'react';
 import type { AuthUser } from '../types';
+import { clearOfflineCache } from '../lib/offlineCache';
 
 const STORAGE_KEY = 'fleetmonitor:auth';
 
@@ -46,6 +47,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const logout = useCallback(() => {
     localStorage.removeItem(STORAGE_KEY);
+    clearOfflineCache();
     setUser(null);
   }, []);
 

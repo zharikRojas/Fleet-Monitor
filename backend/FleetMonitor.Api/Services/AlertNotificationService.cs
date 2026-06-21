@@ -32,6 +32,6 @@ public class AlertNotificationService(IHubContext<AlertsHub> hubContext)
             }
         };
 
-        return hubContext.Clients.Group(AlertsHub.AdminGroup).SendAsync("Nueva alerta", payload);
+        return hubContext.Clients.Group(AlertsHub.AdminGroup).SendAsync("NewAlert", payload);
     }
 }

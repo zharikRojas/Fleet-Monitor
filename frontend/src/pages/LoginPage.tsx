@@ -7,7 +7,7 @@ import { ApiError } from '../api/client';
 import { useAuth } from '../context/AuthContext';
 import './LoginPage.css';
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Paragraph } = Typography;
 const { useBreakpoint } = Grid;
 
 interface LoginFormValues {
@@ -70,7 +70,7 @@ export function LoginPage() {
             <Col xs={24} md={14} lg={15}>
               {error && (
                 <Alert
-                  message={error}
+                  title={error}
                   type="error"
                   showIcon
                   className="login-alert"

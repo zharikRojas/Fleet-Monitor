@@ -11,10 +11,14 @@
   },
   "dependencies": {
     "@ant-design/icons": "^6.2.5",
+    "@microsoft/signalr": "^10.0.0",
     "antd": "^6.4.4",
+    "maplibre-gl": "^5.24.0",
     "react": "^19.2.6",
     "react-dom": "^19.2.6",
-    "react-router-dom": "^7.18.0"
+    "react-map-gl": "^8.1.1",
+    "react-router-dom": "^7.18.0",
+    "recharts": "^3.8.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
